@@ -37,17 +37,15 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [allTags, setAllTags] = useState<Tag[]>([])
   const { toast } = useToast()
 
-  // Load data from localStorage on mount
   useEffect(() => {
     const savedData = localStorage.getItem(STORAGE_KEY)
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData)
-        // Convert string dates back to Date objects
         const processedData = parsedData.map((item: any) => ({
           ...item,
           dateAdded: new Date(item.dateAdded),
-          tags: item.tags || [], // Garantizar que todos tengan la propiedad tags
+          tags: item.tags || [],
         }))
         setAllMedia(processedData)
       } catch (error) {
@@ -72,12 +70,10 @@ export const MediaProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   }, [])
 
-  // Save data to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(allMedia))
   }, [allMedia])
 
-  // Guardar etiquetas cuando cambien
   useEffect(() => {
     localStorage.setItem(TAGS_STORAGE_KEY, JSON.stringify(allTags))
   }, [allTags])

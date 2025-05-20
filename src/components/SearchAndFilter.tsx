@@ -1,5 +1,5 @@
 import type React from "react"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { Search, Tags, Star, SlidersHorizontal, X } from "lucide-react"
 import { Input } from "./ui/input"
 import { Button } from "./ui/button"
@@ -23,40 +23,50 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ mediaType, onSearchRe
   const [filterFavorites, setFilterFavorites] = useState(false)
   const [selectedTags, setSelectedTags] = useState<Tag[]>([])
   const [ratingFilter, setRatingFilter] = useState([0, 10])
+  const [filteredMediaItems, setFilteredMediaItems] = useState<Media[]>([])
   const navigate = useNavigate()
 
-  const filteredMedia = allMedia.filter((item) => {
-    const typeMatch = mediaType ? item.type === mediaType : true
+  // Memoizamos la función de filtrado para evitar recálculos innecesarios
+  const filterMedia = useCallback(() => {
+    return allMedia.filter((item) => {
+      const typeMatch = mediaType ? item.type === mediaType : true
 
-    const searchMatch = searchTerm
-      ? item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchTerm.toLowerCase())
-      : true
+      const searchMatch = searchTerm
+        ? item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          item.description.toLowerCase().includes(searchTerm.toLowerCase())
+        : true
 
-    const favoriteMatch = filterFavorites ? item.isFavorite : true
+      const favoriteMatch = filterFavorites ? item.isFavorite : true
 
-    const tagMatch =
-      selectedTags.length === 0 ? true : selectedTags.every((tag) => item.tags.some((itemTag) => itemTag.id === tag.id))
+      const tagMatch =
+        selectedTags.length === 0
+          ? true
+          : selectedTags.every((tag) => item.tags.some((itemTag) => itemTag.id === tag.id))
 
+      const ratingMatch =
+        item.rating !== null
+          ? item.rating >= ratingFilter[0] && item.rating <= ratingFilter[1]
+          :
+            ratingFilter[0] === 0
 
-    const ratingMatch =
-      item.rating !== null
-        ? item.rating >= ratingFilter[0] && item.rating <= ratingFilter[1]
-        : 
-          ratingFilter[0] === 0
+      return typeMatch && searchMatch && favoriteMatch && tagMatch && ratingMatch
+    })
+  }, [allMedia, mediaType, searchTerm, filterFavorites, selectedTags, ratingFilter])
 
-    return typeMatch && searchMatch && favoriteMatch && tagMatch && ratingMatch
-  })
-
+  // Efecto para actualizar los resultados filtrados cuando cambian los criterios de filtrado
   useEffect(() => {
+    const filtered = filterMedia()
+    setFilteredMediaItems(filtered)
+
+    // Notificar a los componentes padres sobre los resultados
     if (onSearchResults) {
-      onSearchResults(filteredMedia.length)
+      onSearchResults(filtered.length)
     }
 
     if (onFilteredMedia) {
-      onFilteredMedia(filteredMedia)
+      onFilteredMedia(filtered)
     }
-  }, [filteredMedia.length, onSearchResults, onFilteredMedia, filteredMedia])
+  }, [filterMedia, onSearchResults, onFilteredMedia])
 
   const handleItemClick = (id: string) => {
     navigate(`/media/${id}`)
@@ -242,14 +252,14 @@ const SearchAndFilter: React.FC<SearchAndFilterProps> = ({ mediaType, onSearchRe
         </motion.div>
       )}
 
-      {searchTerm && filteredMedia.length > 0 && (
+      {searchTerm && filteredMediaItems.length > 0 && (
         <motion.div
           className="bg-card border rounded-md shadow-sm max-h-60 overflow-y-auto"
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           transition={{ duration: 0.3 }}
         >
-          {filteredMedia.map((item) => (
+          {filteredMediaItems.map((item) => (
             <div
               key={item.id}
               className="p-2 hover:bg-accent cursor-pointer border-b last:border-b-0 flex items-center gap-2 transition-colors"
