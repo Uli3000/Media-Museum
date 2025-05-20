@@ -16,7 +16,7 @@ const Header: React.FC = () => {
   ]
 
   return (
-    <header className="sticky top-0 z-10 backdrop-blur-lg bg-background/80 border-b border-border">
+    <header className="sticky top-0 z-20 backdrop-blur-lg bg-background/80 border-b border-border">
       <div className="container mx-auto px-4 flex justify-between items-center h-16">
         <Link
           to="/"
