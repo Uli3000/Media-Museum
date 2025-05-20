@@ -1,4 +1,4 @@
-# 🎬 MediaVaultDeluxe
+# 🎬 MediaMuseum -> https://media-museum.netlify.app
 
 ![Versión](https://img.shields.io/badge/versión-1.0.0-blue)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
@@ -10,7 +10,7 @@
 
 ## 📋 Descripción
 
-**MediaVaultDeluxe** es una aplicación web moderna para organizar y gestionar tu colección personal de películas, series y anime. Con una interfaz elegante y funcional, podrás catalogar tus medios favoritos, buscar información detallada, filtrar por categorías y exportar tus listas de favoritos.
+**MediaMuseum** es una aplicación web moderna para organizar y gestionar tu colección personal de películas, series y anime. Con una interfaz elegante y funcional, podrás catalogar tus medios favoritos, buscar información detallada, filtrar por categorías y exportar tus listas de favoritos.
 
 ## ✨ Características principales
 
