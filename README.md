@@ -38,24 +38,6 @@
   - 🔄 React Context API para gestión de estado
   - 🎞️ TMDB API para información de medios
 
-## 📁 Estructura del proyecto
-
-\`\`\`
-mediavaultdeluxe/
-├── public/             # Archivos estáticos
-├── src/
-│   ├── components/     # Componentes reutilizables
-│   ├── context/        # Contextos de React (estado global)
-│   ├── hooks/          # Hooks personalizados
-│   ├── lib/            # Utilidades y funciones auxiliares
-│   ├── pages/          # Componentes de página
-│   ├── services/       # Servicios para APIs externas
-│   ├── types/          # Definiciones de tipos TypeScript
-│   ├── App.tsx         # Componente principal
-│   └── main.tsx        # Punto de entrada
-└── ...                 # Archivos de configuración
-\`\`\`
-
 ## 🤝 Contribución
 
 Las contribuciones son bienvenidas. Para contribuir:
